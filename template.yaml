@@ -69,7 +69,7 @@ Resources:
     Properties:
       CodeUri: awslambda/tasks/
       Handler: get_tasks.lambda_handler
-      Runtime: python3.10
+      Runtime: python3.11
       Timeout: 30
       Architectures:
         - x86_64

@@ -95,6 +95,14 @@ Resources:
       ArtifactStore:
         Type: S3
         Location: !Ref TdbArtifactsBucket
+      Triggers:
+        - ProviderType: CodeStarSourceConnection
+          GitConfiguration:
+            SourceActionName: SourceAction
+            Push:
+              - Branches:
+                  Includes:
+                    - develop
       Stages:
        - Name: SourceStage
          Actions:
