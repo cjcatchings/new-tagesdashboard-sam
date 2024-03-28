@@ -3,4 +3,4 @@ phases:
   build:
     commands:
       - sam build
-      - sam deploy --stack-name Tagesdashboard-SAM --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
+      - sam deploy --stack-name Tagesdashboard-SAM --capabilities CAPABILITY_IAM --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
