@@ -1,0 +1,15 @@
+{
+    "TableName": "TagesdashboardTasks",
+    "KeySchema": [
+      { "AttributeName": "Assignee", "KeyType": "HASH" },
+      { "AttributeName": "Id", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "Assignee", "AttributeType": "S" },
+      { "AttributeName": "Id", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+}

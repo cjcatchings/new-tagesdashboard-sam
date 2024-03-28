@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  tagesdashboard-sam
+
+  SAM Template for tagesdashboard-sam
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Parameters:
+  AWSENVNAME:
+    Type: String
+    Description: AWS Env where SAM is being executed (AWS_SAM_LOCAL or AWS)
+    Default: 'AWS'
+  STAGENAME:
+    Type: String
+    Description:  The Stage Name for the API
+    Default: 'Sandbox'
+  CognitoUserPoolId:
+    Type: String
+    Description:  The ARN of the Cognito User Pool to use for authenticating against APIs
+    Default: '{{resolve:ssm:/Tagesdashboard/CogntioUserPool:1}}'
+  CognitoClientId:
+    Type: String
+    Description:  The Client ID for use of the Cognito User Pool for authenticating against APIs
+    Default: '{{resolve:ssm:/Tagesdashboard/CogntioClientId:1}}'
+
+Resources:
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: TagesdashboardTasks
+      AttributeDefinitions:
+        - AttributeName: Id
+          AttributeType: S
+        - AttributeName: Assignee
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Assignee
+          KeyType: HASH
+        - AttributeName: Id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+  GetTasksApi:
+    Type:  AWS::Serverless::Api
+    Properties:
+      EndpointConfiguration:
+        Type: REGIONAL
+      StageName: Sandbox
+      Auth:
+        DefaultAuthorizer: TdbCognitoAuth
+        Authorizers:
+          TdbCognitoAuth:
+            UserPoolArn: !Sub 
+              - "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${CognitoUserPoolId}"
+              - CognitoUserPoolId: !Ref CognitoUserPoolId
+            Identity:
+              Header: Authorization
+
+      
+  GetTasksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: awslambda/tasks/
+      Handler: get_tasks.lambda_handler
+      Runtime: python3.10
+      Timeout: 30
+      Architectures:
+        - x86_64
+      Events:
+        GetTasks:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: get
+            RestApiId:
+              Ref: GetTasksApi
+            Auth:
+              Authorizer: TdbCognitoAuth
+      Environment:
+        Variables:
+          AWSENV: !Ref AWSENVNAME
+          USERPOOL: !Ref CognitoUserPoolId
+          CLIENT_ID: !Ref CognitoClientId
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+
+Outputs:
+  GetTasksApi:
+    Description: "API Gateway endpoint URL for Prod stage for Get Tasks function"
+    Value: !Sub 
+      - "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiStage}/tasks/"
+      - RestApi: !Ref GetTasksApi
+        ApiStage: !Ref STAGENAME
+  GetTasksFunction:
+    Description: "Get Tasks Lambda Function ARN"
+    Value: !GetAtt GetTasksFunction.Arn
+  GetTasksFunctionIamRole:
+    Description: "Implicit IAM Role created for Get Tasks function"
+    Value: !GetAtt GetTasksFunctionRole.Arn

@@ -1,0 +1,40 @@
+{
+    "RequestItems": {
+        "TagesdashboardTasks": [
+            {
+                "PutRequest": {
+                    "Item": {
+                        "Id": {"S": "sample1"}, 
+                        "Summary": {"S": "Buy groceries"}, 
+                        "CreateTime": {"N": "1710497712.789131"}, 
+                        "DueDate": {"N": "1710497712.789131"}, 
+                        "Status": {"S": "OPEN"}, 
+                        "Assignee": {"S": "ccatchings"}
+                    }
+                }
+            },{
+                "PutRequest": {
+                    "Item": {
+                        "Id": {"S": "sample2"}, 
+                        "Summary": {"S": "Taxes"}, 
+                        "CreateTime": {"N": "1710497712.789131"}, 
+                        "DueDate": {"N": "1710497712.789131"}, 
+                        "Status": {"S": "OPEN"}, 
+                        "Assignee": {"S": "ccatchings"}
+                    }
+                }
+            },{
+                "PutRequest": {
+                    "Item": {
+                        "Id": {"S": "sample3"}, 
+                        "Summary": {"S": "Clean flat"}, 
+                        "CreateTime": {"N": "1710497712.789131"}, 
+                        "DueDate": {"N": "1710497712.789131"}, 
+                        "Status": {"S": "OPEN"}, 
+                        "Assignee": {"S": "ccatchings"}
+                    }
+                }
+            }
+        ]
+    }
+}
