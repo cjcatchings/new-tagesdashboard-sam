@@ -31,7 +31,6 @@ Parameters:
 Resources:
   TasksTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
     Properties:
       TableName: TagesdashboardTasks
       AttributeDefinitions:
