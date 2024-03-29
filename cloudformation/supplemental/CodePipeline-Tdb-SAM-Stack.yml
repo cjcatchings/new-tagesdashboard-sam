@@ -48,6 +48,10 @@ Resources:
               Resource: !Sub 'arn:aws:s3:::${TdbArtifactsBucket}/*'
             - Effect: Allow
               Action:
+                - 'ssm:*'
+              Resource: '*'
+            - Effect: Allow
+              Action:
                 - 'logs:CreateLogGroup'
                 - 'logs:CreateLogStream'
                 - 'logs:PutLogEvents'
