@@ -1,5 +1,4 @@
 {
-    "RequestItems": {
         "TagesdashboardTasks": [
             {
                 "PutRequest": {
@@ -36,5 +35,4 @@
                 }
             }
         ]
-    }
 }

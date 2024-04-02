@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  tagesdashboard-sam - Databases
+
+  SAM Template for tagesdashboard-sam Databases
+
+Resources:
+  NotificationsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: TagesdashboardNotifications
+      AttributeDefinitions:
+        - AttributeName: Recipient
+          AttributeType: S
+        - AttributeName: Id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Recipient
+          KeyType: HASH
+        - AttributeName: Id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: TagesdashboardTasks
+      AttributeDefinitions:
+        - AttributeName: Id
+          AttributeType: S
+        - AttributeName: Assignee
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Assignee
+          KeyType: HASH
+        - AttributeName: Id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+Outputs:
+  TasksTableName:
+    Value: !Ref TasksTable
